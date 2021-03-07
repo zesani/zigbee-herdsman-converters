@@ -16857,6 +16857,21 @@ const devices = [
         extend: preset.light_onoff_brightness_colortemp_color({disableColorTempStartup: true}),
         meta: {applyRedFix: true},
     },
+    // Orvibo
+    {
+        zigbeeModel: ['0f3667e60926447688e9b52ff25aceeb'], // The model ID from: Device with modelID 'lumi.sens' is not supported.
+        model: '0f3667e60926447688e9b52ff25aceeb', // Vendor model number, look on the device for a model number
+        vendor: 'Orvibo', // Vendor of the device (only used for documentation and startup logging)
+        description: 'lights ', // Description of the device, copy from vendor site. (only used for documentation and startup logging)
+        supports: 'lights', // Actions this device supports (only used for documentation)
+        extend: preset.switch(),
+        meta: {configureKey: 1},
+        configure: async (device, coordinatorEndpoint, logger) => {
+            const endpoint = device.getEndpoint(1);
+            await reporting.bind(endpoint, coordinatorEndpoint, ['genOnOff']);
+            await reporting.onOff(endpoint);
+        },
+    },
 ];
 
 module.exports = devices.map((device) => {
